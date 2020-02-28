@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<zabbix_export>
+   <version>4.4</version>
+   <date>2020-01-28T11:58:29Z</date>
+   <groups>
+      <group>
+         <name>Templates</name>
+      </group>
+   </groups>
+   <templates>
+      <template>
+         <template>Template AWS S3</template>
+         <name>Template AWS S3</name>
+         <groups>
+            <group>
+               <name>Templates</name>
+            </group>
+         </groups>
+         <applications>
+            <application>
+               <name>AWS - S3</name>
+            </application>
+         </applications>
+         <items>
+            <item>
+               <name>Bucket Size</name>
+               <type>EXTERNAL</type>
+               <key>s3_stats.py[&quot;--metric&quot;,&quot;BucketSizeBytes&quot;,&quot;--instance-id&quot;,&quot;{$AWS_S3_BUCKET_NAME}&quot;,&quot;--storage-type&quot;,&quot;{$AWS_S3_STORAGE_TYPE}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>1d</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bytes</units>
+               <description>The amount of data in bytes stored in a bucket in the Standard storage class, Standard - Infrequent Access (Standard_IA) storage class, or the Reduced Redundancy Storage (RRS) class.
+
+Valid storage type filters: StandardStorage, or StandardIAStorage, or ReducedRedundancyStorage (see StorageType dimension)</description>
+               <applications>
+                  <application>
+                     <name>AWS - S3</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>Number of Objects in Bucket</name>
+               <type>EXTERNAL</type>
+               <key>s3_stats.py[&quot;--metric&quot;,&quot;NumberOfObjects&quot;,&quot;--instance-id&quot;,&quot;{$AWS_S3_BUCKET_NAME}&quot;,&quot;--storage-type&quot;,&quot;AllStorageTypes&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>1d</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Objects</units>
+               <description>The total number of objects stored in a bucket for all storage classes except for the GLACIER storage class.</description>
+               <applications>
+                  <application>
+                     <name>AWS - S3</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+         </items>
+         <macros>
+            <macro>
+               <macro>{$AWS_REGION}</macro>
+               <value>eu-west-1</value>
+            </macro>
+            <macro>
+               <macro>{$AWS_S3_BUCKET_NAME}</macro>
+            </macro>
+            <macro>
+               <macro>{$AWS_S3_STORAGE_TYPE}</macro>
+               <value>StandardStorage</value>
+            </macro>
+         </macros>
+      </template>
+   </templates>
+</zabbix_export>

@@ -1,0 +1,114 @@
+<?xml version="1.0" ?>
+<zabbix_export>
+   <version>4.4</version>
+   <date>2020-01-28T11:58:31Z</date>
+   <groups>
+      <group>
+         <name>Templates</name>
+      </group>
+   </groups>
+   <templates>
+      <template>
+         <template>Template AWS CloudFront</template>
+         <name>Template AWS CloudFront</name>
+         <groups>
+            <group>
+               <name>Templates</name>
+            </group>
+         </groups>
+         <applications>
+            <application>
+               <name>AWS - CloudFront</name>
+            </application>
+         </applications>
+         <items>
+            <item>
+               <name>4xxErrorRate</name>
+               <type>EXTERNAL</type>
+               <key>cloudfront_stats.py[&quot;--metric&quot;,&quot;4xxErrorRate&quot;,&quot;--instance-id&quot;,&quot;{$AWS_CF_DISTRIBUTION}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_CF_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <applications>
+                  <application>
+                     <name>AWS - CloudFront</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>5xxErrorRate</name>
+               <type>EXTERNAL</type>
+               <key>cloudfront_stats.py[&quot;--metric&quot;,&quot;5xxErrorRate&quot;,&quot;--instance-id&quot;,&quot;{$AWS_CF_DISTRIBUTION}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_CF_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <applications>
+                  <application>
+                     <name>AWS - CloudFront</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>Inbound Traffic</name>
+               <type>EXTERNAL</type>
+               <key>cloudfront_stats.py[&quot;--metric&quot;,&quot;BytesDownloaded&quot;,&quot;--instance-id&quot;,&quot;{$AWS_CF_DISTRIBUTION}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_CF_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bps</units>
+               <applications>
+                  <application>
+                     <name>AWS - CloudFront</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>Outbound Traffic</name>
+               <type>EXTERNAL</type>
+               <key>cloudfront_stats.py[&quot;--metric&quot;,&quot;BytesUploaded&quot;,&quot;--instance-id&quot;,&quot;{$AWS_CF_DISTRIBUTION}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_CF_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bps</units>
+               <applications>
+                  <application>
+                     <name>AWS - CloudFront</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>TotalErrorRate</name>
+               <type>EXTERNAL</type>
+               <key>cloudfront_stats.py[&quot;--metric&quot;,&quot;TotalErrorRate&quot;,&quot;--instance-id&quot;,&quot;{$AWS_CF_DISTRIBUTION}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_CF_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <applications>
+                  <application>
+                     <name>AWS - CloudFront</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+         </items>
+         <macros>
+            <macro>
+               <macro>{$AWS_CF_DISTRIBUTION}</macro>
+            </macro>
+            <macro>
+               <macro>{$AWS_CF_REGION}</macro>
+               <value>us-east-1</value>
+            </macro>
+         </macros>
+      </template>
+   </templates>
+</zabbix_export>

@@ -1,0 +1,183 @@
+<?xml version="1.0" ?>
+<zabbix_export>
+   <version>4.4</version>
+   <date>2020-01-28T11:58:30Z</date>
+   <groups>
+      <group>
+         <name>Templates</name>
+      </group>
+   </groups>
+   <templates>
+      <template>
+         <template>Template AWS VPC VPN</template>
+         <name>Template AWS VPC VPN</name>
+         <groups>
+            <group>
+               <name>Templates</name>
+            </group>
+         </groups>
+         <applications>
+            <application>
+               <name>AWS - VPC - VPN</name>
+            </application>
+         </applications>
+         <items>
+            <item>
+               <name>Inbound Traffic</name>
+               <type>EXTERNAL</type>
+               <key>vpn_stats.py[&quot;--metric&quot;,&quot;TunnelDataIn&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>bps</units>
+               <applications>
+                  <application>
+                     <name>AWS - VPC - VPN</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>Outbound Traffic</name>
+               <type>EXTERNAL</type>
+               <key>vpn_stats.py[&quot;--metric&quot;,&quot;TunnelDataOut&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>bps</units>
+               <applications>
+                  <application>
+                     <name>AWS - VPC - VPN</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>Tunnel State</name>
+               <type>EXTERNAL</type>
+               <key>vpn_stats.py[&quot;--metric&quot;,&quot;TunnelState&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <applications>
+                  <application>
+                     <name>AWS - VPC - VPN</name>
+                  </application>
+               </applications>
+               <valuemap>
+                  <name>Not Ok / OK check</name>
+               </valuemap>
+               <preprocessing>
+                  <step>
+                     <type>BOOL_TO_DECIMAL</type>
+                     <params/>
+                  </step>
+               </preprocessing>
+               <request_method>POST</request_method>
+            </item>
+         </items>
+         <macros>
+            <macro>
+               <macro>{$AWS_REGION}</macro>
+               <value>eu-west-1</value>
+            </macro>
+         </macros>
+         <screens>
+            <screen>
+               <name>AWS VPC - VPN</name>
+               <hsize>1</hsize>
+               <vsize>2</vsize>
+               <screen_items>
+                  <screen_item>
+                     <resourcetype>1</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <key>vpn_stats.py[&quot;--metric&quot;,&quot;TunnelState&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+                        <host>Template AWS VPC VPN</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>0</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>VPN Bandwidth</name>
+                        <host>Template AWS VPC VPN</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>1</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+               </screen_items>
+            </screen>
+         </screens>
+      </template>
+   </templates>
+   <graphs>
+      <graph>
+         <name>VPN Bandwidth</name>
+         <show_work_period>NO</show_work_period>
+         <show_triggers>NO</show_triggers>
+         <graph_items>
+            <graph_item>
+               <drawtype>BOLD_LINE</drawtype>
+               <color>1A7C11</color>
+               <item>
+                  <host>Template AWS VPC VPN</host>
+                  <key>vpn_stats.py[&quot;--metric&quot;,&quot;TunnelDataIn&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+            <graph_item>
+               <sortorder>1</sortorder>
+               <drawtype>BOLD_LINE</drawtype>
+               <color>F63100</color>
+               <item>
+                  <host>Template AWS VPC VPN</host>
+                  <key>vpn_stats.py[&quot;--metric&quot;,&quot;TunnelDataOut&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+   </graphs>
+   <value_maps>
+      <value_map>
+         <name>Not Ok / OK check</name>
+         <mappings>
+            <mapping>
+               <value>0</value>
+               <newvalue>Not OK</newvalue>
+            </mapping>
+            <mapping>
+               <value>1</value>
+               <newvalue>OK</newvalue>
+            </mapping>
+         </mappings>
+      </value_map>
+   </value_maps>
+</zabbix_export>

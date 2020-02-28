@@ -1,0 +1,857 @@
+<?xml version="1.0" ?>
+<zabbix_export>
+   <version>4.4</version>
+   <date>2020-01-28T11:58:29Z</date>
+   <groups>
+      <group>
+         <name>Templates</name>
+      </group>
+   </groups>
+   <templates>
+      <template>
+         <template>Template AWS RDS</template>
+         <name>Template AWS RDS</name>
+         <groups>
+            <group>
+               <name>Templates</name>
+            </group>
+         </groups>
+         <applications>
+            <application>
+               <name>AWS - RDS</name>
+            </application>
+         </applications>
+         <items>
+            <item>
+               <name>InstanceDiskFreePercentage</name>
+               <type>CALCULATED</type>
+               <key>rds.disk.percentage</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>%</units>
+               <params>100*last(&quot;rds_stats.py[\&quot;--metric\&quot;,\&quot;FreeStorageSpace\&quot;,\&quot;--instance-id\&quot;,\&quot;{HOST.HOST}\&quot;,\&quot;--access-key\&quot;,\&quot;{$AWS_ACCESS_KEY}\&quot;,\&quot;--secret-key\&quot;,\&quot;{$AWS_SECRET_KEY}\&quot;,\&quot;--region\&quot;,\&quot;{$AWS_REGION}\&quot;]&quot;) / {$RDS_INSTANCE_DISK}</params>
+               <description>The percentage of available diskspace based on the instance disk size macro</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+               <triggers>
+                  <trigger>
+                     <expression>{last(0)} &lt; 5</expression>
+                     <name>Free disk space is less than 5% on RDS {HOST.NAME}</name>
+                     <opdata>{ITEM.LASTVALUE}</opdata>
+                     <priority>HIGH</priority>
+                  </trigger>
+                  <trigger>
+                     <expression>{last(0)} &lt; 10</expression>
+                     <name>Free disk space is less than 10% on RDS {HOST.NAME}</name>
+                     <opdata>{ITEM.LASTVALUE}</opdata>
+                     <priority>AVERAGE</priority>
+                     <dependencies>
+                        <dependency>
+                           <name>Free disk space is less than 5% on RDS {HOST.NAME}</name>
+                           <expression>{Template AWS RDS:rds.disk.percentage.last(0)} &lt; 5</expression>
+                        </dependency>
+                     </dependencies>
+                  </trigger>
+               </triggers>
+            </item>
+            <item>
+               <name>BinLogDiskUsage</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;BinLogDiskUsage&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <status>DISABLED</status>
+               <value_type>FLOAT</value_type>
+               <units>Bytes/Second</units>
+               <description>The amount of disk space occupied by binary logs on the master. Applies to MySQL read replicas.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>CPUCreditBalance</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;CPUCreditBalance&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <status>DISABLED</status>
+               <description>[T2 instances] The number of CPU credits available for the instance to burst beyond its base CPU utilization. Credits are stored in the credit balance after they are earned and removed from the credit balance after they expire. Credits expire 24 hours after they are earned.
+
+CPU credit metrics are available only at a 5 minute frequency.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>CPUCreditUsage</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;CPUCreditUsage&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <status>DISABLED</status>
+               <value_type>FLOAT</value_type>
+               <units>Bytes/Second</units>
+               <description>[T2 instances] The number of CPU credits consumed by the instance. One CPU credit equals one vCPU running at 100% utilization for one minute or an equivalent combination of vCPUs, utilization, and time (for example, one vCPU running at 50% utilization for two minutes or two vCPUs running at 25% utilization for two minutes).
+
+CPU credit metrics are available only at a 5 minute frequency. If you specify a period greater than five minutes, use the Sum statistic instead of the Average statistic.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>CPUUtilization</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;CPUUtilization&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>%</units>
+               <description>The percentage of CPU utilization.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+               <triggers>
+                  <trigger>
+                     <expression>{avg(#3)} &gt; 85</expression>
+                     <name>High CPU on {HOST.NAME}</name>
+                     <opdata>{ITEM.LASTVALUE}%</opdata>
+                     <priority>HIGH</priority>
+                  </trigger>
+               </triggers>
+            </item>
+            <item>
+               <name>DatabaseConnections</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;DatabaseConnections&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <units>Count</units>
+               <description>The number of database connections in use.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+               <triggers>
+                  <trigger>
+                     <expression>{last()} &gt; 100</expression>
+                     <name>High number of connections on {HOST.NAME}</name>
+                     <opdata>{ITEM.LASTVALUE}</opdata>
+                     <priority>HIGH</priority>
+                     <description>There are &gt; 100 open connections on this DB instance. This may indicate a problem with the application.</description>
+                  </trigger>
+               </triggers>
+            </item>
+            <item>
+               <name>DiskQueueDepth</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;DiskQueueDepth&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Count</units>
+               <description>The number of outstanding IOs (read/write requests) waiting to access the disk.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>FreeableMemory</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;FreeableMemory&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>G</units>
+               <description>The amount of available random access memory.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>FreeStorageSpace</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;FreeStorageSpace&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>G</units>
+               <description>The amount of available storage space.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+               <triggers>
+                  <trigger>
+                     <expression>{last()} &lt; 5</expression>
+                     <name>5GB diskspace left on {HOST.NAME}</name>
+                     <status>DISABLED</status>
+                     <priority>HIGH</priority>
+                     <description>There is (less than) 5GB storage space left in the database instance.</description>
+                  </trigger>
+               </triggers>
+            </item>
+            <item>
+               <name>NetworkReceiveThroughput</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;NetworkReceiveThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bytes/Second</units>
+               <description>The incoming (Receive) network traffic on the DB instance, including both customer database traffic and Amazon RDS traffic used for monitoring and replication.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <preprocessing>
+                  <step>
+                     <type>CHANGE_PER_SECOND</type>
+                     <params/>
+                  </step>
+                  <step>
+                     <type>MULTIPLIER</type>
+                     <params>8</params>
+                  </step>
+               </preprocessing>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>NetworkTransmitThroughput</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;NetworkTransmitThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bytes/Second</units>
+               <description>The outgoing (Transmit) network traffic on the DB instance, including both customer database traffic and Amazon RDS traffic used for monitoring and replication.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <preprocessing>
+                  <step>
+                     <type>CHANGE_PER_SECOND</type>
+                     <params/>
+                  </step>
+                  <step>
+                     <type>MULTIPLIER</type>
+                     <params>8</params>
+                  </step>
+               </preprocessing>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>ReadIOPS</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;ReadIOPS&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Count/Second</units>
+               <description>The average number of disk I/O operations per second.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>ReadLatency</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;ReadLatency&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Seconds</units>
+               <description>The average amount of time taken per disk I/O operation.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>ReadThroughput</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;ReadThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bytes/Second</units>
+               <description>The average number of bytes read from disk per second.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>SwapUsage</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;SwapUsage&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bytes</units>
+               <description>The amount of swap space used on the DB instance.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>WriteIOPS</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;WriteIOPS&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Count/Second</units>
+               <description>The average number of disk I/O operations per second.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>WriteLatency</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;WriteLatency&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Seconds</units>
+               <description>The average amount of time taken per disk I/O operation.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>WriteThroughput</name>
+               <type>EXTERNAL</type>
+               <key>rds_stats.py[&quot;--metric&quot;,&quot;WriteThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>2w</history>
+               <trends>1w</trends>
+               <value_type>FLOAT</value_type>
+               <units>Bytes/Second</units>
+               <description>The average number of bytes written to disk per second.</description>
+               <applications>
+                  <application>
+                     <name>AWS - RDS</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+         </items>
+         <macros>
+            <macro>
+               <macro>{$AWS_REGION}</macro>
+               <value>eu-west-1</value>
+            </macro>
+            <macro>
+               <macro>{$RDS_INSTANCE_DISK}</macro>
+               <value>50</value>
+            </macro>
+         </macros>
+         <screens>
+            <screen>
+               <name>RDS Metrics</name>
+               <hsize>2</hsize>
+               <vsize>7</vsize>
+               <screen_items>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>CPU Usage</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>0</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>Available memory</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>1</x>
+                     <y>0</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>ReadIOPS</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>1</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>WriteIOPS</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>1</x>
+                     <y>1</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>ReadThroughput</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>2</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>WriteThroughput</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>1</x>
+                     <y>2</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>ReadLatency</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>3</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>WriteLatency</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>1</x>
+                     <y>3</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>Space Available on Storage</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>4</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>SWAP Usage</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>1</x>
+                     <y>4</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>Database connections</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>0</x>
+                     <y>5</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+                  <screen_item>
+                     <resourcetype>0</resourcetype>
+                     <style>0</style>
+                     <resource>
+                        <name>Pending requests in disk IO</name>
+                        <host>Template AWS RDS</host>
+                     </resource>
+                     <width>500</width>
+                     <height>100</height>
+                     <x>1</x>
+                     <y>5</y>
+                     <colspan>1</colspan>
+                     <rowspan>1</rowspan>
+                     <elements>0</elements>
+                     <valign>0</valign>
+                     <halign>0</halign>
+                     <dynamic>0</dynamic>
+                     <sort_triggers>0</sort_triggers>
+                     <url/>
+                     <application/>
+                     <max_columns>3</max_columns>
+                  </screen_item>
+               </screen_items>
+            </screen>
+         </screens>
+      </template>
+   </templates>
+   <graphs>
+      <graph>
+         <name>Available memory</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;FreeableMemory&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>CPU Usage</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;CPUUtilization&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>Database connections</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;DatabaseConnections&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>Network traffic</name>
+         <ymin_type_1>FIXED</ymin_type_1>
+         <graph_items>
+            <graph_item>
+               <drawtype>GRADIENT_LINE</drawtype>
+               <color>00AA00</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;NetworkReceiveThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+            <graph_item>
+               <sortorder>1</sortorder>
+               <drawtype>GRADIENT_LINE</drawtype>
+               <color>3333FF</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;NetworkTransmitThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>Pending requests in disk IO</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;DiskQueueDepth&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>ReadIOPS</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;ReadIOPS&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>ReadLatency</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;ReadLatency&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>ReadThroughput</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;ReadThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>Space Available on Storage</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;FreeStorageSpace&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>SWAP Usage</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;SwapUsage&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>WriteIOPS</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;WriteIOPS&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>WriteLatency</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;WriteLatency&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+      <graph>
+         <name>WriteThroughput</name>
+         <graph_items>
+            <graph_item>
+               <color>C80000</color>
+               <item>
+                  <host>Template AWS RDS</host>
+                  <key>rds_stats.py[&quot;--metric&quot;,&quot;WriteThroughput&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               </item>
+            </graph_item>
+         </graph_items>
+      </graph>
+   </graphs>
+</zabbix_export>

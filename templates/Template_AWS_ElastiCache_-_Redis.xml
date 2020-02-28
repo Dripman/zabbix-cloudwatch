@@ -1,0 +1,164 @@
+<?xml version="1.0" ?>
+<zabbix_export>
+   <version>4.4</version>
+   <date>2020-01-28T11:58:32Z</date>
+   <groups>
+      <group>
+         <name>Templates</name>
+      </group>
+   </groups>
+   <templates>
+      <template>
+         <template>Template AWS ElastiCache - Redis</template>
+         <name>Template AWS ElastiCache - Redis</name>
+         <description>AWS Elasticache Redis cache</description>
+         <templates>
+            <template>
+               <name>Template AWS ElastiCache</name>
+            </template>
+         </templates>
+         <groups>
+            <group>
+               <name>Templates</name>
+            </group>
+         </groups>
+         <applications>
+            <application>
+               <name>Elasticache - Redis</name>
+            </application>
+         </applications>
+         <items>
+            <item>
+               <name>ActiveDefragHits</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;ActiveDefragHits&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <value_type>FLOAT</value_type>
+               <units>hits</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>BytesUsedForCache</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;BytesUsedForCache&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <value_type>FLOAT</value_type>
+               <units>bytes</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>CacheHits</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;CacheHits&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <units>hits</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>CacheMisses</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;CacheMisses&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <units>misses</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>EngineCPUUtilization</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;EngineCPUUtilization&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <value_type>FLOAT</value_type>
+               <units>%</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>ReplicationBytes</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;ReplicationBytes&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <value_type>FLOAT</value_type>
+               <units>bytes</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>ReplicationLag</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;ReplicationLag&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <value_type>FLOAT</value_type>
+               <units>seconds</units>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+            <item>
+               <name>SaveInProgress</name>
+               <type>EXTERNAL</type>
+               <key>elasticache_stats.py[&quot;--metric&quot;,&quot;SaveInProgress&quot;,&quot;--instance-id&quot;,&quot;{HOST.HOST}&quot;,&quot;--access-key&quot;,&quot;{$AWS_ACCESS_KEY}&quot;,&quot;--secret-key&quot;,&quot;{$AWS_SECRET_KEY}&quot;,&quot;--region&quot;,&quot;{$AWS_REGION}&quot;]</key>
+               <delay>5m</delay>
+               <history>30d</history>
+               <trends>14d</trends>
+               <applications>
+                  <application>
+                     <name>Elasticache - Redis</name>
+                  </application>
+               </applications>
+               <request_method>POST</request_method>
+            </item>
+         </items>
+         <macros>
+            <macro>
+               <macro>{$AWS_REGION}</macro>
+               <value>eu-west-1</value>
+            </macro>
+         </macros>
+      </template>
+   </templates>
+</zabbix_export>
